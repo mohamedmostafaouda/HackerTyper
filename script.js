@@ -8,10 +8,11 @@ $(function () {
         var key = event.keyCode || event.charCode;
 
         if( key == 8 ){
-            i--;
+           i-=1;
+            if(i<0)i=0;
             while (expression[i]==' ')i-=1;
-            while (expression[i]=='>')i-=3;
             while (expression[i]==';')i-=4;
+            while (expression[i]=='>')i-=3;
             $('#hacker').html(expression.substr(0,i));
         }
         else{
