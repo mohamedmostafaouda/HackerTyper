@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .red-box{
+            border: 2px black solid;
+            width: 500px;
+            height: 500px;
+            position: absolute;
+        }
+        *{
+            color: green;
+            background-color: black;
+            font-size: 20px;
+        }
+        .cursor{
+          animation-name: blink;
+          animation-duration: 1s;
+          animation-iteration-count: infinite;
+          animation-play-state: running;
+          
+        }
+        .hide{
+            visibility: hidden !important;
+        }
+        #hacker{
+            display: inline;
+        }
+        @keyframes blink {
+            0%{
+                opacity: 1;
+            }
+            50%{
+                opacity: 0;
+            }
+            100%{
+                opacity: 1;
+            }
+            
+        }
+    </style>
+</head>
+<body>
+    <pre id="hacker">#include iostream<br>
+    #include vector<br>
+    using namespace std;<br>
+    bool ors (bool first,bool second){<br>
+    return first | second;<br>       
+        }<br>
+        bool ands (bool first,bool second){<br>
+            return first & second;<br>
+        }<br>
+        bool nots (bool element){<br>
+            return !element;<br>
+        }<br>
+        int main()
+        {
+            vector char elements;
+            cout ands(1,0);
+        }</pre>
+        <span class="cursor">|</span>
+        <span class="cursor2">|</span>
+    <script src="jquery.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
