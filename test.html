@@ -45,25 +45,234 @@
     </style>
 </head>
 <body>
-    <pre id="hacker">#include iostream<br>
-    #include vector<br>
-    using namespace std;<br>
-    bool ors (bool first,bool second){<br>
-    return first | second;<br>       
-        }<br>
-        bool ands (bool first,bool second){<br>
-            return first & second;<br>
-        }<br>
-        bool nots (bool element){<br>
-            return !element;<br>
-        }<br>
-        int main()
-        {
-            vector char elements;
-            cout ands(1,0);
-        }</pre>
-        <span class="cursor">|</span>
-        <span class="cursor2">|</span>
+    <pre id="hacker">
+            #include &lt;stdio.h&gt;
+            #include &lt;malloc.h&gt;
+            #include &lt;string.h&gt;
+            #include &lt;ctype.h&gt;
+            #include&lt;iostream&gt;
+            #include&lt;bits/stdc++.h&gt;
+            using namespace std;
+            
+            int main()
+            {
+                FILE *datafile;
+                char *filename = &quot;contact.txt&quot;;/*declare file name*/
+                char ch;
+                firstc = NULL;
+                datafile = fopen(filename,&quot;r&quot;);/* open file for reading*/
+            
+                if(datafile)
+                {
+                    firstc = (struct contact *)malloc(sizeof(struct contact));
+                /*use of malloc to set aside memory relative to size of structure contact*/
+                    currentc = firstc;       /*make first record current*/
+                    while(1) /*endless while loop. a NULL pointer in final node ends loop*/
+                         {
+                        newc = (struct contact *)malloc(sizeof(struct contact));
+                        fread(currentc,sizeof(struct contact),1,datafile);
+                        if(currentc-&gt;next == NULL)   /* NULL indicates end of node list*/
+                            break;
+                        currentc-&gt;next = newc;       /* pointer referencing next node*/
+                        currentc-&gt;count=0;           /* initiates count for comments*/
+                        currentc = newc;             /* make current record new*/
+                    }
+                    fclose(datafile);                /* close file - good practice to cloe files after use*/
+                    cnum = currentc-&gt;number;
+            
+                }
+            
+               while(ch != 'Q')
+                {
+                fflush(stdin);
+                cout&lt;&lt; &quot;==============================&quot;&lt;&lt;endl;
+                    cout&lt;&lt;&quot; Welcome To The Contact Manager &quot;&lt;&lt;endl;/* print menu messages*/
+                   cout&lt;&lt;&quot;-- -----------------------------&quot;&lt;&lt;endl;
+                    cout&lt;&lt;&quot;1 - Add a new contact&quot;&lt;&lt;endl
+                &lt;&lt;&quot;2 - List all contacts&quot;&lt;&lt;endl
+                &lt;&lt;&quot;3 - Find a contact by name&quot;&lt;&lt;endl
+                &lt;&lt;&quot;-- -----------------------------&quot;&lt;&lt;endl;
+                    cout&lt;&lt;&quot;Q - Save and quit\n&quot;;
+                   cout&lt;&lt;&quot;\tYour choice: &quot;;
+                    ch = getchar();
+                    ch = toupper(ch);/*changes user input case to upper case*/
+                    switch(ch)     /*stores in ch variable.*/
+                    {
+                        case '1':
+                            cout&lt;&lt;&quot;Add a new contact\n&quot;;
+                        fflush(stdin);
+                            addNewcontact();//call addNewcontact function
+                            break;
+            
+                    case '2':
+                    cout&lt;&lt;&quot;List all contacts\n&quot;;
+                    listAll();
+                    break;
+            
+                    case '3':
+                    cout&lt;&lt;&quot;Find a contact by phone \n&quot;;
+                    findcontact();
+                    break;
+                        case 'Q':
+                            cout&lt;&lt;&quot;Save and quit\n&quot;;
+                            default:
+                            break;
+                    }
+                }
+            
+            /*
+             * Save the records to disk
+             */
+                currentc = firstc;
+            
+                if(currentc == NULL)
+                    return(0);		/*no data to write*/
+            
+                datafile = fopen(filename,&quot;w&quot;);   /*open file to write*/
+            
+                if(datafile == NULL)
+                {
+                    cout&lt;&lt;&quot;Error writing to %s\n&quot;&lt;&lt;filename&lt;&lt;endl;
+                    return(1);
+                }
+                                /* Write each record to disk*/
+                while(currentc != NULL)
+                {
+                    fwrite(currentc,sizeof(struct contact),1,datafile);
+                    currentc = currentc-&gt;next;
+                }
+                fclose(datafile);             /*closes data file*/
+                return(0);
+            }
+            /*----------------------------------------------------------------------------*/
+            void addNewcontact(void) /* add new contact function*/
+            {
+                newc = (struct contact *)malloc(sizeof(struct contact));
+                /*allocates memory for new structure.*/
+            /*
+             * Checks to see whether this is the first record in file
+             * If so, then all pointers are initialized to this record,
+             */
+                if(firstc==NULL)
+                    firstc = currentc = newc;
+            /*
+             * if not, end of structure list is obtained
+             */
+                else
+                {
+                    currentc = firstc;      /* make the first record the current one*/
+            
+                    while(currentc-&gt;next != NULL)currentc = currentc-&gt;next;
+                                            /* and loop through all records*/
+                    currentc-&gt;next = newc;  /* pointer to next node */
+                    currentc = newc;        /* make current record the new one*/
+                }
+            /* update the structure */
+                cnum++;
+                cout&lt;&lt;&quot;\n&quot;&lt;&lt;&quot;contact number: &quot;&lt;&lt;cnum&lt;&lt;endl;
+                currentc-&gt;number = cnum;    /*cnum is used to give unique account numbers*/
+            
+                cout&lt;&lt;&quot;Enter contact Phone number: &quot;;
+                cin&gt;&gt;currentc-&gt;phone;
+                cout&lt;&lt;endl;
+            
+               cout&lt;&lt;&quot;Enter contact name: &quot;;
+                cin&gt;&gt;currentc-&gt;name;
+            
+            
+                cout&lt;&lt;&quot;contact added!&quot;&lt;&lt;endl;
+                currentc-&gt;count=0;
+            /*
+             * gives the new record a NULL pointer
+             * to show it's the last record:
+             */
+                currentc-&gt;next = NULL;
+            }
+            /*----------------------------------------------------------------------------*/
+            void listAll(void) /* list all contacts function*/
+            {
+                if(firstc==NULL)
+                    cout&lt;&lt;&quot;There are no contacts to display!&quot;&lt;&lt;endl; /*prints message*/
+            
+                else
+                {
+                    cout&lt;&lt;&quot;numOfContact# &quot;&lt;&lt;&quot;        Name &quot;&lt;&lt;&quot;        Phone&quot;&lt;&lt;endl;
+                    cout&lt;&lt;&quot;---------- ---------------- ------------- &quot;&lt;&lt;endl;
+                                        /*prints table titles*/
+                    currentc=firstc;
+            
+                    do
+                    {
+            
+                           cout&lt;&lt; &quot;     &quot; &lt;&lt;currentc-&gt;number&lt;&lt; &quot;            &quot; &lt;&lt;currentc-&gt;name&lt;&lt; &quot;        &quot;&lt;&lt;currentc-&gt;phone &lt;&lt;endl;
+            
+                            /*prints values of number, name, phone and email*/
+                    }
+            
+                    while((currentc=currentc-&gt;next) != NULL);
+                }
+            }
+            /*----------------------------------------------------------------------------*/
+            
+            int findnum (int recordnum)
+            {
+                int record;
+                record = recordnum;
+                currentc = firstc;
+                while(currentc != NULL)
+                {
+            
+                    if(currentc-&gt;number == record)
+                     {
+                       return 1;
+                     }
+            
+                else
+                {
+                    currentc = currentc-&gt;next;
+                }
+                }
+                return -1;
+            }
+            /*----------------------------------------------------------------------------*/
+            int findcontact(void) /* find contact function*/
+            {
+                 char buff[20];
+            
+                 if(firstc==NULL)
+                {
+                    cout&lt;&lt;&quot;There are no contacts to find!&quot;&lt;&lt;endl;
+                    return 1;
+                }
+            
+                cout&lt;&lt;&quot;Enter contact phone: &quot;;
+                fflush(stdin);/*clears any text from the input stream*/
+                cin&gt;&gt;buff;
+            
+                currentc = firstc;
+                while(currentc != NULL)
+                {
+                    if( strcmp(currentc-&gt;phone, buff) == 0 )
+                    {
+                         cout&lt;&lt;&quot;numOfContact# &quot;&lt;&lt;&quot;        Name &quot;&lt;&lt;&quot;        Phone&quot;&lt;&lt;endl;
+                    cout&lt;&lt;&quot;---------- ---------------- ------------- &quot;&lt;&lt;endl;
+                        /*prints table titles*/
+                        cout&lt;&lt; &quot;     &quot; &lt;&lt;currentc-&gt;number&lt;&lt; &quot;            &quot; &lt;&lt;currentc-&gt;name&lt;&lt; &quot;        &quot;&lt;&lt;currentc-&gt;phone &lt;&lt;endl;
+            
+                        return 0;
+                    }
+                    else
+                    {
+                        currentc = currentc-&gt;next;
+                    }
+                }
+                cout&lt;&lt;&quot;contact &quot;&lt;&lt;buff&lt;&lt;&quot; was not found!\n&quot;;
+                      return 1;
+            }
+            </pre>
+            <span class="cursor">|</span>
+            <span class="cursor2">|</span>
+            <section id="scroll"></section>
     <script src="jquery.js"></script>
     <script src="script.js"></script>
 </body>
