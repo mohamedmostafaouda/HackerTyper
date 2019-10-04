@@ -10,8 +10,8 @@ $(function () {
         if( key == 8 ){
             i--;
             while (expression[i]==' ')i-=1;
-            while (expression[i]=='<')i-=3;
-            while (expression[i]=='&')i-=3;
+            while (expression[i]=='>')i-=3;
+            while (expression[i]==';')i-=4;
             $('#hacker').html(expression.substr(0,i));
         }
         else{
